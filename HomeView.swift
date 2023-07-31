@@ -103,6 +103,11 @@ struct MainHomeView: View {
             .padding(.horizontal, 20)
             Spacer()
             
+            Text("Your Schedule").frame(maxWidth: .infinity, alignment: .center)
+                .foregroundColor(.white)
+                .font(.custom("Chalkboard SE", size: UIScreen.main.bounds.width * 0.09).bold())
+            
+            Spacer()
             RideBox(email: self.email)
             
             Spacer()
@@ -150,9 +155,11 @@ struct RideBox: View {
                 .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.6)
                 .foregroundColor(.white)
                 .shadow(radius: 50)
-
+            
+                       
             VStack {
-                Text("Hello, SwiftUI!")
+
+                    
                 List(selectedRides, id: \.self) { ride in
                     Text(ride)
                 }
