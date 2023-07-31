@@ -59,3 +59,24 @@ func setRidesInFirebase(rides: [Ride], email: String) {
 
 
 
+func fetchSelectedRidesFromFirebase(email: String, completion: @escaping ([String]) -> Void) {
+    let db = Firestore.firestore()
+    let rideDatabaseRef = db.collection("users").document(email)
+
+    rideDatabaseRef.getDocument { (documentSnapshot, error) in
+        if let error = error {
+            print("Error fetching document: \(error)")
+            completion([])
+        } else if let document = documentSnapshot, document.exists {
+            if let selectedRides = document.data()?["rides"] as? [String] {
+                completion(selectedRides)
+            } else {
+                completion([])
+            }
+        } else {
+            print("Document does not exist")
+            completion([])
+        }
+    }
+}
+
