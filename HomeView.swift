@@ -125,28 +125,11 @@ struct MainHomeView: View {
 struct RideBox: View {
     var email: String
     @State private var selectedRides: [String] = []
+    @State private var isShowingPurpleSquare: Bool = false
+    @State private var selectedRideName: String = ""
 
     init(email: String) {
         self.email = email
-    }
-
-    private func fetchSelectedRidesFromFirebase() {
-        let db = Firestore.firestore()
-        let rideDatabaseRef = db.collection("users").document(email)
-
-        rideDatabaseRef.getDocument { (documentSnapshot, error) in
-            if let error = error {
-                print("Error fetching document: \(error)")
-            } else if let document = documentSnapshot, document.exists {
-                if let selectedRides = document.data()?["rides"] as? [String] {
-                    self.selectedRides = selectedRides
-                } else {
-                    self.selectedRides = []
-                }
-            } else {
-                print("Document does not exist")
-            }
-        }
     }
 
     var body: some View {
@@ -155,22 +138,68 @@ struct RideBox: View {
                 .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.6)
                 .foregroundColor(.white)
                 .shadow(radius: 50)
-            
-                       
-            VStack {
 
-                    
-                List(selectedRides, id: \.self) { ride in
-                    Text(ride)
-                }
-                .onAppear {
-                    fetchSelectedRidesFromFirebase()
+            VStack {
+                if selectedRides.count != 0 {
+                    ScrollView {
+                        // Use a ScrollView instead of a List
+                        VStack(spacing: 10) {
+                            ForEach(selectedRides, id: \.self) { ride in
+                                Button(action: {
+                                    selectedRideName = ride
+                                    isShowingPurpleSquare = true
+                                }) {
+                                    Text(ride)
+                                        .foregroundColor(.black)
+                                        .font(.custom("Chalkboard SE", size: UIScreen.main.bounds.width * 0.04).bold())
+                                        .padding()
+                                }
+                            }
+                        }
+                    }.frame(maxHeight: UIScreen.main.bounds.height * 0.6)
+                } else {
+                    Text("No rides selected")
+                        .foregroundColor(.black)
+                        .font(.custom("Chalkboard SE", size: UIScreen.main.bounds.width * 0.09).bold())
+                        .padding(.all, 20)
+                        .multilineTextAlignment(.center)
+
+                    Text("Click on the bottom middle icon to add rides")
+                        .font(.custom("Chalkboard SE", size: UIScreen.main.bounds.width * 0.04).bold())
+                        .foregroundColor(.black)
+                        .frame(maxWidth: UIScreen.main.bounds.width * 0.5, alignment: .center)
+                        .multilineTextAlignment(.center)
                 }
             }
-            .padding() // Add padding to the VStack if needed
+            .padding()
+            .onAppear {
+                fetchSelectedRidesFromFirebase(email: self.email) { fetchedSelectedRides in
+                    self.selectedRides = fetchedSelectedRides
+                }
+
+            }
+            
+            if isShowingPurpleSquare {
+                // Purple square view on top of everything
+                ZStack {
+                    RoundedRectangle(cornerRadius: 25)
+                        .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.3)
+                        .foregroundColor(.white)
+                        .shadow(radius: 50)
+                    
+                    Text(selectedRideName)
+                        .foregroundColor(.black)
+                        .font(.custom("Chalkboard SE", size: UIScreen.main.bounds.width * 0.04).bold())
+                        .padding()
+                        .frame(maxWidth: UIScreen.main.bounds.width * 0.8)
+                        
+                }
+            }
         }
     }
 }
+
+
 
 
 
