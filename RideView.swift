@@ -137,14 +137,15 @@ struct RideRow: View {
                 Text(ride.name)
                     .font(.custom("Chalkboard SE", size: UIScreen.main.bounds.width * 0.05))
                     .frame(maxWidth: .infinity, alignment: .center)
-                    .foregroundColor(.black)
+                    .foregroundColor(.white)
+                    
                 Spacer()
 
                 CircleColorView(isChecked: $isSelected)
 
                 Spacer()
                 
-                Text(String(isSelected)) // Use the local binding value
+            
 
             }
         }
