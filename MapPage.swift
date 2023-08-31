@@ -20,12 +20,18 @@ struct MapPage: View {
     
     
     let simpsons = CLLocationCoordinate2D(latitude: 34.13974, longitude: -118.35404)
+    
+    
     var body: some View {
         VStack {
-            Map {
+            Map() {
                 UserAnnotation(anchor: .center)
-                Marker("The Simpsons Ride" , coordinate: simpsons)
+        
                 
+            }.mapControls {
+                MapCompass()
+                MapUserLocationButton()
+                MapPitchButton()
             }
             Text("\(self.location.coordinate.latitude)")
         }

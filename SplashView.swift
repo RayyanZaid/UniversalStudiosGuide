@@ -18,13 +18,7 @@ struct SplashView: View {
             } else {
                 Color.black
                     .edgesIgnoringSafeArea(.all)
-                GeometryReader { geometry in
-                    Image("Logo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: geometry.size.width * 0.5, height: geometry.size.height * 0.5)
-                        .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
-                }
+                Text("Logo Here")
             }
         }.onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {

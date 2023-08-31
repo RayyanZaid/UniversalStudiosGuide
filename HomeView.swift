@@ -40,7 +40,8 @@ struct HomeView: View {
                 }
                 
                 if selectedTab == .map {
-                    MapPage(location: CLLocation(latitude: 34.1409 , longitude: 118.354 ))
+//                    MapPage(location: CLLocation(latitude: 34.1409 , longitude: 118.354 ))
+                   ContentView()
                 }
                 
                 ZStack {
@@ -203,20 +204,6 @@ struct RideBox: View {
 
 
 
-
-
-
-
-
-struct MapView: View {
-    var body: some View {
-
-        Text("Map View")
-            .font(.custom("Chalkboard SE", size: UIScreen.main.bounds.width * 0.09).bold())
-            .foregroundColor(.white)
-            .multilineTextAlignment(.center)
-    }
-}
 
 #Preview {
     HomeView(email: "")
